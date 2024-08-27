@@ -1,34 +1,56 @@
-# Deploy the hello-world-app to Kubernetes and expose it via a LoadBalancer
+# Deploy the hello-world-app to OpenShift and expose it via a LoadBalancer and Route
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hello-world-app-deployment
+  name: hello-world
+  labels:
+    app: hello-world
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      app: hello-world-app
-  replicas: 1
+      app: hello-world
   template:
     metadata:
       labels:
-        app: hello-world-app
+        app: hello-world
     spec:
       containers:
-        - name: hello-world-app
-          image: gruntwork-io/hello-world-app:v1
-          ports:
-            - containerPort: 8080
+      - name: hello-world
+        image: gcr.io/google-samples/hello-app:1.0
+        ports:
+        - containerPort: 8080
+
 ---
-kind: Service
+
 apiVersion: v1
+kind: Service
 metadata:
-  name: hello-world-app-service
+  name: hello-world
+  labels:
+    app: hello-world
 spec:
   selector:
-    app: hello-world-app
+    app: hello-world
   ports:
-    - protocol: TCP
-      targetPort: 8080
-      port: 8080
-  type: LoadBalancer
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+  type: ClusterIP
+
+---
+
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: hello-world
+  labels:
+    app: hello-world
+spec:
+  to:
+    kind: Service
+    name: hello-world
+  port:
+    targetPort: 8080
+  wildcardPolicy: None
