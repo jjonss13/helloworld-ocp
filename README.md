@@ -1,2 +1,2 @@
-# helloworld-k8s
-Deployment and service
+# helloworld-ocp
+Deployment, service and route for OpenShift
