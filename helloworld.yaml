@@ -7,7 +7,7 @@ metadata:
   labels:
     app: hello-world
 spec:
-  replicas: 4
+  replicas: 1
   selector:
     matchLabels:
       app: hello-world
@@ -17,10 +17,10 @@ spec:
         app: hello-world
     spec:
       containers:
-      - name: hello-world
-        image: gcr.io/google-samples/hello-app:1.0
-        ports:
-        - containerPort: 8080
+        - name: hello-world
+          image: gcr.io/google-samples/hello-app:1.0
+          ports:
+            - containerPort: 8080
 
 ---
 
@@ -34,9 +34,10 @@ spec:
   selector:
     app: hello-world
   ports:
-  - protocol: TCP
-    port: 8080
-    targetPort: 8080
+    - name: http
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
   type: ClusterIP
 
 ---
@@ -45,12 +46,12 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   name: hello-world
-  labels:
-    app: hello-world
 spec:
   to:
     kind: Service
     name: hello-world
   port:
-    targetPort: 8080
-  wildcardPolicy: None
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
