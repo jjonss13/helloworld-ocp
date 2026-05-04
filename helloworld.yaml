@@ -1,4 +1,4 @@
-# Deploy the hello-world-app to OpenShift and expose it via a LoadBalancer and Route
+# Deploy the hello-world-app to OpenShift and expose it via a LoadBalancer and secure Route (tls enabled)
 ---
 apiVersion: apps/v1
 kind: Deployment
