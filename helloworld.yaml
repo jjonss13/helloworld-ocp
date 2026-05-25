@@ -52,6 +52,3 @@ spec:
     name: hello-world
   port:
     targetPort: http
-  tls:
-    termination: edge
-    insecureEdgeTerminationPolicy: Redirect
