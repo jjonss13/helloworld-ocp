@@ -47,11 +47,15 @@ kind: Route
 metadata:
   name: hello-world
 spec:
+  host: hello-world.apps.ocp01.int.oden2.com
+  path: /
   to:
     kind: Service
     name: hello-world
+    weight: 100
   port:
     targetPort: http
   tls:
     termination: edge
     insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None
